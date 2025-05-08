@@ -4,13 +4,31 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./:/app  
+      - ./:/app
     environment:
       - HOLA=MUNDO
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=usuario
+      - DB_PASSWORD=password123
+      - DB_NAME=notasdb
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     networks:
       - redlocal
 
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: notasdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - redlocal
+
+volumes:
+  pgdata:
+
 networks:
   redlocal:
-
